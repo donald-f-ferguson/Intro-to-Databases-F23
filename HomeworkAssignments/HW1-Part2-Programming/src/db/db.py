@@ -14,6 +14,7 @@ class DB:
             password=password,
             database=database,
             cursorclass=pymysql.cursors.DictCursor,
+            autocommit=True
         )
         self.conn = conn
 
@@ -48,7 +49,25 @@ class DB:
         :param filters: Key-value pairs that the rows from table must satisfy
         :returns: A query string and any placeholder arguments
         """
-        pass
+        result = "select * from " + table + " "
+        where_condition = None
+        arguments = None
+
+        if filters:
+            slots = []
+            arguments = []
+
+            result += "where "
+
+            for k, v in filters.items():
+                slots.append(k + "=%s")
+                arguments.append(v)
+
+            where_condition = " AND ".join(slots)
+
+            result += where_condition
+
+        return result, arguments
 
     def select(self, table: str, filters: KV) -> List[KV]:
         """Runs a select statement. You should use build_select_query and execute_query.
@@ -57,7 +76,10 @@ class DB:
         :param filters: Key-value pairs that the rows to be selected must satisfy
         :returns: The selected rows
         """
-        pass
+        q, args = self.build_select_query(table, filters)
+        result = self.execute_query(q, args, True)
+        return result
+
 
     @staticmethod
     def build_insert_query(table: str, values: KV) -> Query:
