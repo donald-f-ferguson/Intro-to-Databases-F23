@@ -2,11 +2,12 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import ValidationError
 
-from resources import BaseResource
-from db import DB
-from models import Student
+from src.resources import BaseResource
+from src.db.db import DB
+from src.models.models import Student
 
 KV = Dict[str, Any]
+
 
 class StudentResource(BaseResource):
     TABLE_NAME = "student"
@@ -23,6 +24,8 @@ class StudentResource(BaseResource):
                   otherwise, None
         """
         try:
+            if raw_dict.get("tot_cred", None):
+                raw_dict["tot_cred"] = int(raw_dict["tot_cred"])
             return Student(**raw_dict)
         except ValidationError:
             return None
