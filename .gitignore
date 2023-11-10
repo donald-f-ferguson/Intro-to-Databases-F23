@@ -4,3 +4,5 @@
 .venv
 venv
 /Lectures/Lecture_8_ER_Relational_SQL_Final_Module_II_NoSQL/secrets.py
+/Lectures/Lecture_9_Module_II_NoSQL_2/mongo_secrets.py
+/Lectures/Lecture_9_Module_II_NoSQL_2/my_secrets.py
